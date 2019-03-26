@@ -1,0 +1,17 @@
+exit 0
+This script is meant to be an example or template, it will not run without modification.
+
+#!/bin/bash
+while true
+do
+        QueryServers.sh [server 1 name]
+        SendWebRequest.sh [server 1 name]
+
+        QueryServers.sh [server 2 name]
+        SendWebRequest.sh [server 2 name]
+		
+		    QueryServers.sh [server 3 name]
+        SendWebRequest.sh [server 3 name]
+
+        sleep 5
+done

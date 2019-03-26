@@ -1,0 +1,40 @@
+exit 0
+This script is meant to be an example or template, it will not run without modification.
+
+#!/bin/bash
+
+host=$"ldaps://[server name]"
+port=$"636"
+binduser=$"[user account]"
+bindpassword=$"[user password]"
+base=$"[base where driver set is located]"
+filter=$"(&(objectClass=DirXML-Driver)(DirXML-DriverStartOption=2))"
+export=$"DirXML-State localEntryID"
+cd [location where scripts are located]
+
+outPrefix="[where scripts are located]"
+outSuffix=".txt"
+out=$outPrefix$[server name]$outSuffix
+rm -f $out
+touch $out
+
+ldapsearch -x -D $binduser -b $base -H $host -s sub -w $bindpassword "$filter" $export |grep -e ^dn:* -e ^DirXML-State:* -e ^localEntryID:* >> $out
+
+sed -i 's/,[dn of driver set]//g' $out
+
+readarray -t lines <<< "$(cat $out | grep localEntryID*)"
+
+for line in "${lines[@]}"; do
+        localEntryID=$(echo $line | sed 's/localEntryID: //g')
+        filePrefix="/var/opt/novell/eDirectory/data/dib/"
+        fileSuffix=".TAO"
+        fileName=$filePrefix$localEntryID$fileSuffix
+        #echo $localEntryID
+        #echo $filePrefix
+        #echo $fileSuffix
+        #echo $fileName
+        cacheSize=$(ssh [user with rights]@$[server name] sudo stat --printf="%s" "$fileName")
+        echo $cacheSize
+        echo "Output cache size before sed and loop again"
+        sed -i "s/$localEntryID/$cacheSize/g" $out
+done

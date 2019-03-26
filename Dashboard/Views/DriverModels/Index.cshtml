@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Dashboard.Models.DriverModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<meta http-equiv="refresh" content="5" />
+<style>
+    .yellow {
+        background-color: lightyellow;
+    }
+
+    .green {
+        background-color: lightgreen;
+    }
+
+    .red {
+        background-color: orangered
+    }
+</style>
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DriverName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentCache)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousCache)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Server)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentCache)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PreviousCache)
+                </td>
+                <td>
+                    @if (item.Status == "Rising")
+                    {
+                        <div class="yellow">@Html.DisplayFor(modelItem => item.Status)</div>
+                    }
+                    @if (item.Status == "Stopped")
+                    {
+                        <div class="red">@Html.DisplayFor(modelItem => item.Status)</div>
+                    }
+                    @if (item.Status == "Lowering")
+                    {
+                        <div class="green">@Html.DisplayFor(modelItem => item.Status)</div>
+                    }
+                    @if (item.Status == "Unchanged")
+                    {
+                        <div class="green">@Html.DisplayFor(modelItem => item.Status)</div>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Server.ServerId)
+                </td>
+                <!--<td>
+                    <a asp-action="Edit" asp-route-id="@item.DriverId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DriverId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DriverId">Delete</a>
+                </td>-->
+
+
+</tr>
+        }
+    </tbody>
+</table>

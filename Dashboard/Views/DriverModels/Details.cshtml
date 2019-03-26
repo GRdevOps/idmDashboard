@@ -1,0 +1,48 @@
+﻿@model Dashboard.Models.DriverModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>DriverModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DriverName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DriverName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentCache)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CurrentCache)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousCache)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PreviousCache)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Server)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Server.ServerId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <!--<a asp-action="Edit" asp-route-id="@Model.DriverId">Edit</a> |-->
+    <a asp-action="Index">Back to List</a>
+</div>

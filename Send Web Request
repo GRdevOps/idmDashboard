@@ -1,0 +1,81 @@
+exit 0
+This script is meant to be an example or template, it will not run without modification.
+
+#!/bin/bash
+inFilePrefix="[location where scripts are located]"
+inFileSuffix=".txt"
+inFile=$inFilePrefix$[server name]$inFileSuffix
+
+cat $inFile
+
+#sed -i 's/,[dn of driver set]//g' $out
+
+readarray -t lines <<< "$(cat $inFile)"
+
+count=0
+DriverID=""
+DriverName=""
+CurrentCache=0
+Status=""G
+ServerID=0
+
+if [[ $1 == "[server 1]" ]]; then
+        ServerID=1
+fi
+if [[ $1 == "[server 2]" ]]; then
+        ServerID=2
+fi
+if [[ $1 == "server 3]" ]]; then
+        ServerID=3
+fi
+
+for line in "${lines[@]}"; do
+        tempCount=$count
+        if [[ $tempCount -eq 0  ]]; then
+                if [[ $line == "dn: [dn of driver 1]"  ]]; then
+                DriverID=1
+                DriverName="[Driver 1 Name from website]"
+                fi
+                if [[ $line == "dn: [dn of driver 2]"  ]]; then
+                DriverID=2
+                DriverName="[Driver 2 Name from website]"
+                fi
+				if [[ $line == "dn: [dn of driver 3]"  ]]; then
+                DriverID=3
+                DriverName="[Driver 3 Name from website]"
+                fi
+
+                #echo $line
+                #echo $count
+                count=$((count + 1))
+        fi
+        if [[ $tempCount -eq 1  ]]; then
+                if [[ $line == "DirXML-State: 2"  ]]; then
+                Status="Auto"
+                fi
+                if [[ $line == "DirXML-State: 0"  ]]; then
+                Status="Stopped"
+                fi
+
+                #echo $line
+                #echo $count
+                count=$((count + 1))
+        fi
+        if [[ $tempCount -eq 2  ]]; then
+                CurrentCache=$(echo $line | sed 's/localEntryID: //g')
+
+                echo $DriverID
+                echo $DriverName
+                echo $CurrentCache
+                echo $Status
+                echo $ServerID
+
+curl -k \
+--header "Content-type: application/json" \
+--request PUT \
+--data "{\"DriverId\": \"$DriverID\", DriverName: \"$DriverName\", \"CurrentCache\": \"$CurrentCache\", \"PreviousCache\": \"0\", \"Status\": \"$Status\", \"ServerId\": \"$ServerID\"}" \
+[Post API from website]/$DriverID
+
+                count=0
+        fi
+done
